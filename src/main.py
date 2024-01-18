@@ -1,15 +1,10 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-
-
-class OrderInfo(BaseModel):
-    cart_value: int
-    delivery_distance: int
-    number_of_items: int
-    time: str
-
+from src.models.order import OrderInfo
+from src.services.order_fee_calculator import FeeCalculator
 
 app = FastAPI()
+
+calculator = FeeCalculator()
 
 
 @app.get("/")
@@ -19,4 +14,5 @@ def main_route():
 
 @app.post("/delivery_fee")
 def delivery_fee(order: OrderInfo):
-    return order
+    fee = calculator.calculate_fee(order)
+    return {"delivery_fee": fee}
