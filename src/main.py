@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+
 from src.models.order import OrderInfo
 from src.services.order_fee_calculator import FeeCalculator
 
@@ -14,5 +15,9 @@ def main_route():
 
 @app.post("/delivery_fee")
 def delivery_fee(order: OrderInfo):
-    fee = calculator.calculate_fee(order)
+    cart_value = order.cart_value
+    distance = order.delivery_distance
+    items = order.number_of_items
+    time = order.time
+    fee = calculator.calculate_fee(cart_value, distance, items, time)
     return {"delivery_fee": fee}
