@@ -1,7 +1,6 @@
 import unittest
 from datetime import datetime
 from src.services.order_fee_calculator import FeeCalculator
-from src.services.order_fee_calculator import FeeCalculatorConstants
 
 
 class TestFeeCalculator(unittest.TestCase):
@@ -9,6 +8,7 @@ class TestFeeCalculator(unittest.TestCase):
         self.calculator = FeeCalculator()
         self.friday_rush = "2024-01-19T18:00:00Z"
         self.not_friday_rush = "2024-01-14T18:00:00Z"
+        self.free_delivery = 20000
 
     def test_cart_value_under_threshold(self):
         return_value = self.calculator._cart_value(700)
@@ -60,7 +60,7 @@ class TestFeeCalculator(unittest.TestCase):
         self.assertEqual(710, return_value)
 
     def test_calculate_fee_cart_value_over_free_delivery_treshold(self):
-        cart_value = FeeCalculatorConstants.FREE_DELIVERY.value
+        cart_value = self.free_delivery
         delivery_distance = 1540
         number_of_items = 15
         return_value = self.calculator.calculate_fee(
