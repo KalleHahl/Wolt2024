@@ -6,8 +6,8 @@ from src.services.order_fee_calculator import FeeCalculator
 class TestFeeCalculator(unittest.TestCase):
     def setUp(self):
         self.calculator = FeeCalculator()
-        self.friday_rush = "2024-01-19T18:00:00Z"
-        self.not_friday_rush = "2024-01-14T18:00:00Z"
+        self.friday_rush = datetime(2024, 1, 12, 18, 0, 0)
+        self.not_friday_rush = datetime(2024, 1, 14, 18, 0, 0)
         self.free_delivery = 20000
 
     def test_cart_value_under_threshold(self):
@@ -38,17 +38,11 @@ class TestFeeCalculator(unittest.TestCase):
         return_value = self.calculator._item_fee(13)
         self.assertEqual(570, return_value)
 
-    def test_parse_time(self):
-        return_value = self.calculator._parse_time(self.friday_rush)
-        self.assertIsInstance(return_value, datetime)
-
     def test_not_friday_rush(self):
-        parsed_time = self.calculator._parse_time(self.not_friday_rush)
-        self.assertFalse(self.calculator._is_friday_rush(parsed_time))
+        self.assertFalse(self.calculator._is_friday_rush(self.not_friday_rush))
 
     def test_is_friday_rush(self):
-        parsed_time = self.calculator._parse_time(self.friday_rush)
-        self.assertTrue(self.calculator._is_friday_rush(parsed_time))
+        self.assertTrue(self.calculator._is_friday_rush(self.friday_rush))
 
     def test_calculate_fee(self):
         cart_value = 790
