@@ -14,10 +14,10 @@ def main_route():
 
 
 @app.post("/api/calculate_delivery_fee", response_model=OrderFeeResponse)
-def delivery_fee(order: OrderInfo):
+def delivery_fee(order: OrderInfo) -> OrderFeeResponse:
     cart_value = order.cart_value
     distance = order.delivery_distance
     items = order.number_of_items
     time = order.time
-    fee = calculator.calculate_fee(cart_value, distance, items, time)
+    fee = calculator.calculate_fee(cart_value, distance, items, time)  # type: ignore[arg-type]
     return OrderFeeResponse(delivery_fee=fee)
