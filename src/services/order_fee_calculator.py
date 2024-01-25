@@ -23,7 +23,7 @@ class Consts(Enum):
 
 class FeeCalculator:
     def calculate_fee(
-        self, cart_value: int, distance: int, items: int, time: str
+        self, cart_value: int, distance: int, items: int, time: datetime
     ) -> int:
         if cart_value >= Consts.FREE_DELIVERY.value:
             return 0
@@ -32,10 +32,9 @@ class FeeCalculator:
         print(distance_fee)
         item_fee = self._item_fee(items)
         fee = distance_fee + item_fee + cart_fee
-        parsed_time = self._parse_time(time)
         fee = (
             int(fee * Consts.RUSH_HOUR_MULTIPLIER.value)
-            if self._is_friday_rush(parsed_time)
+            if self._is_friday_rush(time)
             else fee
         )
         return min(fee, Consts.MAX_FEE.value)
@@ -71,9 +70,6 @@ class FeeCalculator:
             extra_item_charge_multiplier * Consts.EXTRA_ITEM_CHARGE.value
             + Consts.BULK_CHARGE.value
         )
-
-    def _parse_time(self, time: str) -> datetime:
-        return datetime.strptime(time, "%Y-%m-%dT%H:%M:%SZ")
 
     def _is_friday_rush(self, time: datetime) -> bool:
         is_friday = time.weekday() == Consts.FRIDAY.value
