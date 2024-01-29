@@ -25,19 +25,24 @@ class FeeCalculator:
     def calculate_fee(
         self, cart_value: int, distance: int, items: int, time: datetime
     ) -> int:
+        """Calculate delivery fee based on cart value, distance, number of items and time of delivery. This is the only mehtod that should be used outside of this class during runtime"""
+
         if cart_value >= Consts.FREE_DELIVERY.value:
             return 0
+
         cart_fee = self._cart_value(cart_value)
         distance_fee = self._distance_fee(distance)
-        print(distance_fee)
         item_fee = self._item_fee(items)
+
         fee = distance_fee + item_fee + cart_fee
-        fee = (
+
+        # Multiply fee by 1.2 if it's Friday and between 15:00 and 19:00
+        final_fee = (
             int(fee * Consts.RUSH_HOUR_MULTIPLIER.value)
             if self._is_friday_rush(time)
             else fee
         )
-        return min(fee, Consts.MAX_FEE.value)
+        return min(final_fee, Consts.MAX_FEE.value)
 
     def _cart_value(self, cart_value: int) -> int:
         if cart_value >= Consts.CART_VALUE_THRESHOLD.value:
@@ -48,6 +53,7 @@ class FeeCalculator:
         if distance <= Consts.BASE_FEE_THRESHOLD.value:
             return Consts.BASE_FEE.value
 
+        # Round up to the nearest ADDITIONAL_DISTANCE_INTERVAL and multiply by ADDITIONAL_DISTANCE_CHARGE
         return (
             Consts.BASE_FEE.value
             + math.ceil(
@@ -73,6 +79,7 @@ class FeeCalculator:
 
     def _is_friday_rush(self, time: datetime) -> bool:
         is_friday = time.weekday() == Consts.FRIDAY.value
+
         is_rush_hour = (
             Consts.RUSH_HOUR_START.value <= time.hour < Consts.RUSH_HOUR_END.value
         )
