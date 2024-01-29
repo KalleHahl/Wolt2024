@@ -10,11 +10,17 @@ calculator = FeeCalculator()
 
 @app.get("/")
 def main_route():
+    """
+    Main route to check if server is running
+    """
     return {"message": "Server is running"}
 
 
 @app.post("/api/calculate_delivery_fee", response_model=OrderFeeResponse)
 def delivery_fee(order: OrderInfo) -> OrderFeeResponse:
+    """
+    Endpoint to calculate delivery fee based on cart value, distance, number of items and time of delivery
+    """
     cart_value = order.cart_value
     distance = order.delivery_distance
     items = order.number_of_items
