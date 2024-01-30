@@ -11,31 +11,31 @@ class TestFeeCalculator(unittest.TestCase):
         self.free_delivery = 20000
 
     def test_cart_value_under_threshold(self):
-        return_value = self.calculator._cart_value(700)
+        return_value = self.calculator._calculate_cart_value_fee(700)
         self.assertEqual(300, return_value)
 
     def test_cart_value_over_threshhold(self):
-        return_value = self.calculator._cart_value(1100)
+        return_value = self.calculator._calculate_cart_value_fee(1100)
         self.assertEqual(0, return_value)
 
     def test_distance_fee_under_base_fee_treshhold(self):
-        return_value = self.calculator._distance_fee(900)
+        return_value = self.calculator._calculate_distance_fee(900)
         self.assertEqual(200, return_value)
 
     def test_distance_fee_over_base_fee_treshhold(self):
-        return_value = self.calculator._distance_fee(1001)
+        return_value = self.calculator._calculate_distance_fee(1001)
         self.assertEqual(300, return_value)
 
     def test_item_fee_under_extra_item_charge_threshold(self):
-        return_value = self.calculator._item_fee(3)
+        return_value = self.calculator._calculate_item_fee(3)
         self.assertEqual(0, return_value)
 
     def test_item_fee_over_extra_item_charge_under_bulk_threshold(self):
-        return_value = self.calculator._item_fee(7)
+        return_value = self.calculator._calculate_item_fee(7)
         self.assertEqual(150, return_value)
 
     def test_item_fee_over_bulk_threshold(self):
-        return_value = self.calculator._item_fee(13)
+        return_value = self.calculator._calculate_item_fee(13)
         self.assertEqual(570, return_value)
 
     def test_not_friday_rush(self):
