@@ -25,14 +25,17 @@ class FeeCalculator:
     def calculate_fee(
         self, cart_value: int, distance: int, items: int, time: datetime
     ) -> int:
-        """Calculate delivery fee based on cart value, distance, number of items and time of delivery. This is the only mehtod that should be used outside of this class during runtime"""
+        """
+        Calculate delivery fee based on cart value, distance, number of items and time of delivery
+        This is the only mehtod that should be used outside of this class during runtime
+        """
 
         if cart_value >= Consts.FREE_DELIVERY.value:
             return 0
 
-        cart_fee = self._cart_value(cart_value)
-        distance_fee = self._distance_fee(distance)
-        item_fee = self._item_fee(items)
+        cart_fee = self._calculate_cart_value_fee(cart_value)
+        distance_fee = self._calculate_distance_fee(distance)
+        item_fee = self._calculate_item_fee(items)
 
         fee = distance_fee + item_fee + cart_fee
 
@@ -44,12 +47,12 @@ class FeeCalculator:
         )
         return min(final_fee, Consts.MAX_FEE.value)
 
-    def _cart_value(self, cart_value: int) -> int:
+    def _calculate_cart_value_fee(self, cart_value: int) -> int:
         if cart_value >= Consts.CART_VALUE_THRESHOLD.value:
             return 0
         return Consts.CART_VALUE_THRESHOLD.value - cart_value
 
-    def _distance_fee(self, distance: int) -> int:
+    def _calculate_distance_fee(self, distance: int) -> int:
         if distance <= Consts.BASE_FEE_THRESHOLD.value:
             return Consts.BASE_FEE.value
 
@@ -63,7 +66,7 @@ class FeeCalculator:
             * Consts.ADDITIONAL_DISTANCE_CHARGE.value
         )
 
-    def _item_fee(self, items: int) -> int:
+    def _calculate_item_fee(self, items: int) -> int:
         if items <= Consts.EXTRA_ITEM_CHARGE_THRESHOLD.value:
             return 0
 
@@ -84,7 +87,4 @@ class FeeCalculator:
             Consts.RUSH_HOUR_START.value <= time.hour < Consts.RUSH_HOUR_END.value
         )
 
-        if is_friday and is_rush_hour:
-            return True
-
-        return False
+        return is_friday and is_rush_hour

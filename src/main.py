@@ -1,11 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 
 from src.models.order import OrderInfo, OrderFeeResponse
 from src.services.order_fee_calculator import FeeCalculator
 
 app = FastAPI()
 
-calculator = FeeCalculator()
+
+def create_calculator() -> FeeCalculator:
+    return FeeCalculator()
 
 
 @app.get("/")
@@ -17,7 +19,9 @@ def main_route():
 
 
 @app.post("/api/calculate_delivery_fee", response_model=OrderFeeResponse)
-def delivery_fee(order: OrderInfo) -> OrderFeeResponse:
+def delivery_fee(
+    order: OrderInfo, calculator: FeeCalculator = Depends(create_calculator)
+) -> OrderFeeResponse:
     """
     Endpoint to calculate delivery fee based on cart value, distance, number of items and time of delivery
     """

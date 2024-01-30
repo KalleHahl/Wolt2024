@@ -16,7 +16,7 @@ input_should_be_int = (
     "Input should be a valid integer, unable to parse string as an integer"
 )
 
-input_should_be_ge_zero = "Input should be greater than or equal to 0"
+input_should_be_ge_zero = "Input should be greater than 0"
 
 input_should_be_str = "Input should be a valid string"
 
