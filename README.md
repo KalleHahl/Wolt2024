@@ -50,7 +50,7 @@ Successfull requests are responded to with code 200 and a json e.g {"delivery_fe
 
 If the request body or its fields are invalid, the request is responded to with error code 422 with a response body with further details
 
-## Command-line:
+## Tests etc:
 
 _Enter poetrys virtual environment with `poetry shell` before running these_
 
