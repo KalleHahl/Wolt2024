@@ -1,4 +1,4 @@
-from pydantic import BaseModel, PositiveInt, field_validator
+from pydantic import BaseModel, PositiveInt, field_validator, Field
 from datetime import datetime
 
 
@@ -22,4 +22,4 @@ class OrderInfo(BaseModel):
 
 
 class OrderFeeResponse(BaseModel):
-    delivery_fee: PositiveInt
+    delivery_fee: int = Field(..., ge=0)

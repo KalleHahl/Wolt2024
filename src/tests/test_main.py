@@ -116,3 +116,16 @@ def test_calculate_fee_endpoint_time_not_UTC_ISO():
     assert response.status_code == 422
     assert response.json()["detail"][0]["msg"] == input_should_be_UTC_ISO
     assert response.json()["detail"][0]["loc"][1] == "time"
+
+
+def test_calculate_fee_endpoint_missing_request_fields():
+    response = client.post(
+        "/api/calculate_delivery_fee",
+        json={
+            "cart_value": 790,
+            "delivery_distance": 2235,
+            "number_of_items": 4,
+        },
+    )
+    assert response.status_code == 422
+    assert response.json()["detail"][0]["msg"] == "Field required"
